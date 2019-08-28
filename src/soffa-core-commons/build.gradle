@@ -1,0 +1,12 @@
+dependencies {
+    implementation 'com.github.javadev:underscore:1.45'
+    implementation 'joda-time:joda-time:2.10'
+    implementation 'com.joestelmach:natty:0.13'
+    implementation 'org.hashids:hashids:1.0.3'
+    implementation 'com.fasterxml.uuid:java-uuid-generator:3.1.5'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    implementation 'org.json:json:20180130'
+    implementation 'net.jodah:failsafe:1.1.0'
+    implementation 'commons-io:commons-io:2.6'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.9'
+}

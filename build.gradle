@@ -1,0 +1,101 @@
+buildscript {
+
+  repositories {
+    mavenCentral()
+    maven {
+      url "https://oss.sonatype.org/content/groups/public"
+    }
+    mavenLocal()
+  }
+
+  dependencies {
+    classpath "io.soffa.gradle:soffa-gradle-plugin:0.1.1"
+    classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+  }
+}
+
+plugins {
+  id "io.codearte.nexus-staging" version "0.21.0"
+}
+
+subprojects {
+  apply plugin: 'io.soffa.java8'
+  apply plugin: 'com.bmuschko.nexus'
+
+  repositories {
+    mavenCentral()
+    mavenLocal()
+  }
+
+  modifyPom {
+    project {
+      name project.name
+      description project.description
+      url "https://github.com/soffahq"
+      inceptionYear '2019'
+
+      organization {
+        name 'io.soffahq'
+        url 'https://github.com/soffahq'
+      }
+      issueManagement {
+        system 'GitHub'
+        url "https://github.com/soffahq"
+      }
+      scm {
+        // connection = "scm:git:git://git@github.com:soffahq/${projectId}.git"
+        // developerConnection = "scm:git:ssh://git@github.com:soffahq/${projectId}.git"
+        url = "https://github.com/soffahq"
+      }
+      licenses {
+        license {
+          name = 'The Apache License, Version 2.0'
+          url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        }
+      }
+      developers {
+        developer {
+          id 'carpedemus'
+          name 'TG'
+          email 'carpedemus@gmail.com'
+        }
+      }
+    }
+  }
+
+  extraArchive {
+    sources = true
+    tests = false
+    javadoc = true
+  }
+
+  nexus {
+    sign = true
+    if (!project.findProperty("release")) {
+      repositoryUrl = "file:${System.getProperty("user.home")}/.m2/repository"
+      snapshotRepositoryUrl = "file:${System.getProperty("user.home")}/.m2/repository"
+    }
+  }
+
+  // ------------------------------------------------------------------------------------------------------------------
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+      url "https://oss.sonatype.org/content/groups/public"
+    }
+    jcenter()
+  }
+
+}
+
+nexusStaging {
+  packageGroup = "io.soffa"
+  // stagingId = UUID.randomUUID().toString()
+}
+
+
+
+
+
