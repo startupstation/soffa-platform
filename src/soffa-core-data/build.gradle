@@ -1,6 +1,0 @@
-dependencies {
-  compile project(':soffa-core-commons')
-  compile 'javax.persistence:javax.persistence-api:2.2'
-  compile 'org.springframework:spring-tx:5.1.8.RELEASE'
-  compile 'com.vladmihalcea:hibernate-types-52:2.4.3'
-}

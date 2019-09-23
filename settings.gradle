@@ -1,9 +1,8 @@
 rootProject.name = 'soffa-core'
 
 
-['soffa-core-commons',
- 'soffa-core-data',
- 'soffa-core-exposition'
+['soffa-core',
+ 'soffa-adapter-spring'
 ].each {
   include ":${it}"
   project(":${it}").projectDir = file("src/${it}")

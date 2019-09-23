@@ -9,7 +9,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "io.soffa.gradle:soffa-gradle-plugin:0.1.1"
+    classpath "io.soffa.gradle:soffa-gradle-plugin:0.1.7"
     classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
   }
 }
@@ -19,7 +19,7 @@ plugins {
 }
 
 subprojects {
-  apply plugin: 'io.soffa.java8'
+  apply plugin: 'io.soffa.java'
   apply plugin: 'com.bmuschko.nexus'
 
   repositories {
@@ -95,7 +95,7 @@ nexusStaging {
   // stagingId = UUID.randomUUID().toString()
 }
 
-
-
+// task releaseLocal(dependsOn: ['clean', 'test', 'install', 'uploadArchives'])
+// gradle clean uploadArchives closeAndReleaseRepository -Prelease=true
 
 

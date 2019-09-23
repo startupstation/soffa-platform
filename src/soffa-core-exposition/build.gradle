@@ -1,3 +1,0 @@
-dependencies {
-  compile 'io.swagger.core.v3:swagger-annotations:2.0.8'
-}
