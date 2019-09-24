@@ -28,12 +28,11 @@ public class RabbitMQAutoConfig {
     }
 
     @RabbitListener(queues = "${spring.application.name}")
-    public void listen(byte[] payload) {
-        Map<String, Object> data = JSON.toMap(new String(payload));
-        String eventId = (String) data.get("eventId");
-        data.remove("eventId");
+    public void listen(byte[] received) {
         if (receiver != null) {
-            receiver.receive(new SimpleEvent(eventId, data));
+            Map<String, Object> data = JSON.toMap(new String(received));
+            String eventId = (String) data.get("eventId");
+            receiver.receive(new SimpleEvent(eventId, (Map)data.get("payload")));
         }
     }
 

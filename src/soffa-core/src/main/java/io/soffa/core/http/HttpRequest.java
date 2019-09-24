@@ -29,6 +29,9 @@ public class HttpRequest {
 
                 @Override
                 public String writeValue(Object value) {
+                    if (value instanceof String) {
+                        return (String)value;
+                    }
                     return JSON.serializeSafe(value);
                 }
             });
@@ -65,7 +68,7 @@ public class HttpRequest {
         req.socketTimeout(timeout);
         kong.unirest.HttpResponse<String> response;
         if (method.equalsIgnoreCase("POST")) {
-            response = req.body(data.tr).asString();
+            response = req.body(data).asString();
         } else {
             response = req.asString();
         }
