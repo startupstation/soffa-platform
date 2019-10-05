@@ -21,6 +21,7 @@ plugins {
 subprojects {
   apply plugin: 'io.soffa.java'
   apply plugin: 'com.bmuschko.nexus'
+  apply plugin: 'maven-publish'
 
   repositories {
     mavenCentral()
@@ -88,7 +89,16 @@ subprojects {
     jcenter()
   }
 
-  project.publishing {
+  publishing {
+
+    publications {
+      maven(MavenPublication) {
+        from project.components.java
+        groupId = project.property("group")
+        artifactId = project.name
+      }
+    }
+
     repositories {
       maven {
         def releasesRepoUrl = "https://maven.pkg.github.com/startupstation"
@@ -101,6 +111,7 @@ subprojects {
       }
     }
   }
+
 
 }
 
