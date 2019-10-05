@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,7 @@ public class RabbitMQAutoConfig {
     }
 
     @Bean
+    @Profile("!test")
     CustomExchange delayExchange() {
         Map<String, Object> args = new HashMap<>();
         args.put("x-delayed-type", "direct");
@@ -37,6 +39,7 @@ public class RabbitMQAutoConfig {
     }
 
     @Bean
+    @Profile("!test")
     Binding binding(Queue queue, Exchange delayExchange) {
         return BindingBuilder.bind(queue).to(delayExchange).with("default").noargs();
     }
