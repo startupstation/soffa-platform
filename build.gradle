@@ -10,72 +10,17 @@ buildscript {
 
   dependencies {
     classpath "io.soffa.gradle:soffa-gradle-plugin:0.1.7"
-    classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
   }
 }
 
-plugins {
-  // id "io.codearte.nexus-staging" version "0.21.0"
-}
 
 subprojects {
   apply plugin: 'io.soffa.java'
-  apply plugin: 'com.bmuschko.nexus'
   apply plugin: 'maven-publish'
 
   repositories {
     mavenCentral()
     mavenLocal()
-  }
-
-  modifyPom {
-    project {
-      name project.name
-      description project.description
-      url "https://github.com/startupstation"
-      inceptionYear '2019'
-
-      organization {
-        name 'startupstation'
-        url 'https://github.com/startupstation'
-      }
-      issueManagement {
-        system 'GitHub'
-        url "https://github.com/startupstation"
-      }
-      scm {
-        // connection = "scm:git:git://git@github.com:soffahq/${projectId}.git"
-        // developerConnection = "scm:git:ssh://git@github.com:soffahq/${projectId}.git"
-        url = "https://github.com/startupstation"
-      }
-      licenses {
-        license {
-          name = 'The Apache License, Version 2.0'
-          url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-        }
-      }
-      developers {
-        developer {
-          id 'titus.gahissy'
-          name 'TG'
-          email 'titus@gahissy.com'
-        }
-      }
-    }
-  }
-
-  extraArchive {
-    sources = true
-    tests = false
-    javadoc = true
-  }
-
-  nexus {
-    sign = true
-    if (!project.findProperty("release")) {
-      repositoryUrl = "file:${System.getProperty("user.home")}/.m2/repository"
-      snapshotRepositoryUrl = "file:${System.getProperty("user.home")}/.m2/repository"
-    }
   }
 
   // ------------------------------------------------------------------------------------------------------------------
