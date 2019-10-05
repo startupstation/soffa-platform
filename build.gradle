@@ -32,21 +32,21 @@ subprojects {
     project {
       name project.name
       description project.description
-      url "https://github.com/soffahq"
+      url "https://github.com/startupstation"
       inceptionYear '2019'
 
       organization {
-        name 'io.soffahq'
-        url 'https://github.com/soffahq'
+        name 'startupstation'
+        url 'https://github.com/startupstation'
       }
       issueManagement {
         system 'GitHub'
-        url "https://github.com/soffahq"
+        url "https://github.com/startupstation"
       }
       scm {
         // connection = "scm:git:git://git@github.com:soffahq/${projectId}.git"
         // developerConnection = "scm:git:ssh://git@github.com:soffahq/${projectId}.git"
-        url = "https://github.com/soffahq"
+        url = "https://github.com/startupstation"
       }
       licenses {
         license {
@@ -56,9 +56,9 @@ subprojects {
       }
       developers {
         developer {
-          id 'carpedemus'
+          id 'titus.gahissy'
           name 'TG'
-          email 'carpedemus@gmail.com'
+          email 'titus@gahissy.com'
         }
       }
     }
