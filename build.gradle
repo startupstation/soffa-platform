@@ -10,13 +10,74 @@ buildscript {
 
   dependencies {
     classpath "io.soffa.gradle:soffa-gradle-plugin:0.1.7"
+    classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
   }
 }
 
+plugins {
+  id "io.codearte.nexus-staging" version "0.21.0"
+}
 
 subprojects {
   apply plugin: 'io.soffa.java'
-  apply plugin: 'maven-publish'
+  apply plugin: 'com.bmuschko.nexus'
+
+  repositories {
+    mavenCentral()
+    mavenLocal()
+  }
+
+  modifyPom {
+    project {
+      name project.name
+      description project.description
+      url "https://github.com/startupstation"
+      inceptionYear '2019'
+
+      organization {
+        name 'co.startupstation'
+        url 'https://github.com/startupstation'
+      }
+      issueManagement {
+        system 'GitHub'
+        url "https://github.com/startupstation"
+      }
+      scm {
+        // connection = "scm:git:git://git@github.com:startupstation/${projectId}.git"
+        // developerConnection = "scm:git:ssh://git@github.com:startupstation/${projectId}.git"
+        url = "https://github.com/startupstation"
+      }
+      licenses {
+        license {
+          name = 'The Apache License, Version 2.0'
+          url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        }
+      }
+      developers {
+        developer {
+          id 'gahissy'
+          name 'TG'
+          email 'titus@gahissy.com'
+        }
+      }
+    }
+  }
+
+  extraArchive {
+    sources = true
+    tests = false
+    javadoc = true
+  }
+
+  nexus {
+    sign = true
+    if (!project.findProperty("release")) {
+      repositoryUrl = "file:${System.getProperty("user.home")}/.m2/repository"
+      snapshotRepositoryUrl = "file:${System.getProperty("user.home")}/.m2/repository"
+    }
+  }
+
+  // ------------------------------------------------------------------------------------------------------------------
 
   repositories {
     mavenLocal()
@@ -27,33 +88,12 @@ subprojects {
     jcenter()
   }
 
-  publishing {
-    repositories {
-      maven {
-        name = "Github"
-        url = uri("https://maven.pkg.github.com/startupstation/soffa-core")
-        credentials {
-          username = findProperty("github.username")
-          password = findProperty("github.token")
-        }
-      }
-    }
-    publications {
-      register("jar", MavenPublication) {
-        from(components["java"])
-        pom {
-          url.set("https://github.com/startupstation/soffa-core.git")
-        }
-      }
-    }
-  }
 }
 
-/*
 nexusStaging {
   packageGroup = "io.soffa"
   // stagingId = UUID.randomUUID().toString()
-}*/
+}
 
 // task releaseLocal(dependsOn: ['clean', 'test', 'install', 'uploadArchives'])
 // gradle clean uploadArchives closeAndReleaseRepository -Prelease=true
