@@ -15,7 +15,7 @@ buildscript {
 }
 
 plugins {
-  id "io.codearte.nexus-staging" version "0.21.0"
+  // id "io.codearte.nexus-staging" version "0.21.0"
 }
 
 subprojects {
@@ -88,12 +88,27 @@ subprojects {
     jcenter()
   }
 
+  project.publishing {
+    repositories {
+      maven {
+        def releasesRepoUrl = "https://maven.pkg.github.com/startupstation"
+        def snapshotsRepoUrl = "https://maven.pkg.github.com/startupstation"
+        url = project.property("version").endsWith('-SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        credentials {
+          username = System.getenv("GITHUB_USER")
+          password = System.getenv("GITHUB_TOKEN")
+        }
+      }
+    }
+  }
+
 }
 
+/*
 nexusStaging {
   packageGroup = "io.soffa"
   // stagingId = UUID.randomUUID().toString()
-}
+}*/
 
 // task releaseLocal(dependsOn: ['clean', 'test', 'install', 'uploadArchives'])
 // gradle clean uploadArchives closeAndReleaseRepository -Prelease=true
