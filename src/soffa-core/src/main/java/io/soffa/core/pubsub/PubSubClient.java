@@ -6,4 +6,8 @@ public interface PubSubClient {
 
     void send(Event event);
 
+    void sendDelayed(Event event, int ttlInSeconds);
+
+    void sendDelayed(String channel, Event event, int ttlInSeconds);
+
 }

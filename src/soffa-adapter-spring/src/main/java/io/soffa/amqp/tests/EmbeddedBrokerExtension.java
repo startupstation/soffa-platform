@@ -6,9 +6,11 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 public class EmbeddedBrokerExtension implements BeforeAllCallback, AfterAllCallback {
 
+    public static String DEFAULT_QUEUE_NAME = "default";
+
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        EmbeddedMQ.boostrap();
+        EmbeddedMQ.boostrap(DEFAULT_QUEUE_NAME);
         Thread.sleep(100);
     }
 
