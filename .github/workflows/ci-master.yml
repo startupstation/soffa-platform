@@ -20,7 +20,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_USER: "startupstation"
         run: |
-            gradle publish
+            gradle publish -Pgithub.token=$GITHUB_TOKEN
 #      - name: Sonatype:Release
 #        env:
 #          NEXUS_USERNAME: ${{ secrets.MAVEN_PUBLIC_USERNAME }}
