@@ -7,21 +7,18 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 public class EmbeddedBrokerExtension implements BeforeAllCallback, AfterAllCallback {
 
-    public static String DEFAULT_QUEUE_NAME = "default";
-    private static final boolean disabled = StringUtils.trimToEmpty(System.getenv("EMBEDDED_TEST_BROKER")).equals("false");
+    private static final boolean DISABLED = StringUtils.trimToEmpty(System.getenv("EMBEDDED_TEST_BROKER")).equals("false");
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        if (disabled) {
-            return;
-        }
-        EmbeddedMQ.boostrap(DEFAULT_QUEUE_NAME);
-        Thread.sleep(100);
+        if (DISABLED) return;
+        EmbeddedMQ.boostrap();
+        Thread.sleep(1000);
     }
 
     @Override
-    public void afterAll(ExtensionContext context) throws Exception {
-        if (disabled) return;
+    public void afterAll(ExtensionContext context) {
+        if (DISABLED) return;
         EmbeddedMQ.shutdown();
     }
 }
