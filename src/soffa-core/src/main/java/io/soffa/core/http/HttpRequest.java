@@ -15,7 +15,7 @@ public class HttpRequest {
     private String method = "POST";
     private String url;
     private Object data;
-    private int timeout = 5000;
+    private int timeout = 10000;
     private Map<String, String> headers = new HashMap<>();
 
     static {
@@ -49,6 +49,11 @@ public class HttpRequest {
         this.method = method;
         this.url = url;
         this.data = data;
+    }
+
+    public HttpRequest withTimeout(int timeout) {
+        this.timeout = timeout;
+        return this;
     }
 
     public void setContentType(String value) {
