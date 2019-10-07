@@ -11,6 +11,13 @@ public abstract class AbstractEntity<I extends EntityId> implements IEntity {
     @Embedded
     private I id;
 
+    public AbstractEntity() {
+    }
+
+    public AbstractEntity(I id) {
+        this.id = id;
+    }
+
     public I getId() {
         return id;
     }
