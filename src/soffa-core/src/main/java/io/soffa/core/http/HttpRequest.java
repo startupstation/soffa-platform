@@ -4,8 +4,12 @@ import io.soffa.core.JSON;
 import kong.unirest.HttpRequestWithBody;
 import kong.unirest.ObjectMapper;
 import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
 import lombok.Data;
+import net.jodah.failsafe.Failsafe;
+import net.jodah.failsafe.RetryPolicy;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +22,13 @@ public class HttpRequest {
     private int timeout = 10000;
     private Map<String, String> headers = new HashMap<>();
 
+    private static RetryPolicy<Object> retryPolicy = new RetryPolicy<>()
+        .handle(UnirestException.class)
+        .withDelay(Duration.ofSeconds(1))
+        .withMaxRetries(3);
+
     static {
+
         Unirest.config()
             .automaticRetries(true)
             .setObjectMapper(new ObjectMapper() {
@@ -30,7 +40,7 @@ public class HttpRequest {
                 @Override
                 public String writeValue(Object value) {
                     if (value instanceof String) {
-                        return (String)value;
+                        return (String) value;
                     }
                     return JSON.serializeSafe(value);
                 }
@@ -72,10 +82,11 @@ public class HttpRequest {
         HttpRequestWithBody req = Unirest.request(method, url).headers(headers);
         req.socketTimeout(timeout);
         kong.unirest.HttpResponse<String> response;
+
         if (method.equalsIgnoreCase("POST")) {
-            response = req.body(data).asString();
+            response = Failsafe.with(retryPolicy).get(() -> req.body(data).asString());
         } else {
-            response = req.asString();
+            response = Failsafe.with(retryPolicy).get(req::asString);
         }
         return new HttpResponse(response.getStatus(), response.getBody(), null);
     }
