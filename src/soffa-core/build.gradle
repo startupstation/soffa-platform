@@ -9,7 +9,7 @@ dependencies {
   implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9'
   implementation 'org.json:json:20180130'
   implementation 'commons-io:commons-io:2.6'
-
+  compile 'com.auth0:java-jwt:3.8.3'
   compile 'javax.persistence:javax.persistence-api:2.2'
   compile 'com.vladmihalcea:hibernate-types-52:2.4.3'
   compile 'javax.transaction:javax.transaction-api:1.3'
