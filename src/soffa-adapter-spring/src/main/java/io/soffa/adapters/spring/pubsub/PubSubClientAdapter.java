@@ -5,12 +5,14 @@ import io.soffa.core.pubsub.Event;
 import io.soffa.core.pubsub.PubSubClient;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
 @Component
 // @ConditionalOnBean(RabbitTemplate.class)
+@ConditionalOnProperty(value = "rabbitmq.enabled", havingValue = "true")
 public class PubSubClientAdapter implements PubSubClient {
 
     public static final String DEFAULT_ROUTING_KEY = "default";

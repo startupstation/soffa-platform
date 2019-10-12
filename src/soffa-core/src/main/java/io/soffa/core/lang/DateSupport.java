@@ -1,4 +1,4 @@
-package io.soffa.core.date;
+package io.soffa.core.lang;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
@@ -107,6 +107,10 @@ public class DateSupport {
 
     public static Date plusMinutes(Date date, int minutes) {
         return new DateTime(date).withSecondOfMinute(0).plusMinutes(minutes).toDate();
+    }
+
+    public static Date plusHours(Date date, int hours) {
+        return new DateTime(date).withSecondOfMinute(0).plusHours(hours).toDate();
     }
 
     public static int secondsBetween(Date date1, Date date2) {

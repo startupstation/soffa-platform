@@ -7,6 +7,7 @@ import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -17,6 +18,7 @@ import java.util.Map;
 @SuppressWarnings("ALL")
 @Configuration
 //@ConditionalOnBean(PubSubListener.class)
+@ConditionalOnProperty(value = "rabbitmq.enabled", havingValue = "true")
 public class RabbitMQAutoConfig {
 
     @Value("${spring.application.name}")

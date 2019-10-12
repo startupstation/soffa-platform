@@ -6,15 +6,15 @@ import java.util.Date;
 @MappedSuperclass
 public abstract class BaseEntity<I extends EntityId> extends AbstractEntity<I> {
 
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private Date createdAt;
+
     public BaseEntity() {
     }
 
     public BaseEntity(I id) {
         super(id);
     }
-
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date createdAt;
 
     public Date getCreatedAt() {
         return createdAt;
