@@ -11,6 +11,10 @@ public interface EntityRepository<T extends AbstractEntity<I>, I extends EntityI
 
     void delete(T entity);
 
+    void deleteAll(Iterable<T> entity);
+
+    void deleteById(I id);
+
     long count();
 
     Optional<T> findById(I id);

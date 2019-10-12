@@ -56,6 +56,15 @@ public class JSON {
         }
     }
 
+    public static List<Map<String, Object>> deserializeArray(String input) {
+        try {
+            ArrayType type = mapper.getTypeFactory().constructArrayType(Map.class);
+            return Arrays.asList(mapper.readValue(input, type));
+        } catch (IOException e) {
+            throw new TechnicalException(ERR_JSON_PARSING, e);
+        }
+    }
+
 
     @SuppressWarnings("unchecked")
     public static Map<String, Object> toMap(Object input) {
