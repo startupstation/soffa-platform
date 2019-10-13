@@ -4,9 +4,9 @@ import java.io.InputStream;
 
 public interface CloudStorageClient {
 
-    void upload(InputStream source, String bucket, String objectName, String contentType);
+    void upload(String bucket, String objectName, InputStream source, String contentType, long contentLength);
 
-    void upload(InputStream source, String objectName, String contentType);
+    void upload(String objectName,  InputStream source, String contentType, long contentLength);
 
     String getDownloadUrl(String bucket, String objectName, long expiresInMinutes);
 
