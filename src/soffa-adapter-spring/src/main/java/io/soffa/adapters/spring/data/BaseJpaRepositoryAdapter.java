@@ -6,6 +6,7 @@ import io.soffa.core.persistence.AbstractEntity;
 import io.soffa.core.persistence.EntityId;
 import io.soffa.core.persistence.EntityRepository;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -33,49 +34,59 @@ public class BaseJpaRepositoryAdapter<T extends AbstractEntity<I>, I extends Ent
     }
 
     @Override
+    @Transactional
     public T save(T entity) {
         return internalRepository.save(entity);
     }
 
     @Override
+    @Transactional
     public <S extends T> List<S> saveAll(Iterable<S> entities) {
         return internalRepository.saveAll(entities);
     }
 
     @Override
+    @Transactional
     public void delete(T entity) {
         internalRepository.delete(entity);
     }
 
     @Override
+    @Transactional
     public void deleteAll(Iterable<T> entities) {
         internalRepository.deleteAll(entities);
     }
 
     @Override
+    @Transactional
     public void deleteById(I id) {
         internalRepository.deleteById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long count() {
         return internalRepository.count();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<T> findById(I id) {
         return internalRepository.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<T> findAll() {
         return internalRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public <E> List<E> query(Class<E> resultType, String query) {
         return em.createQuery(query, resultType).getResultList();
     }
 
+    @Transactional(readOnly = true)
     public <E> List<E> query(Class<E> resultType, String query, Map<String, Object> params) {
         Query q = em.createQuery(query, resultType);
         for (Map.Entry<String, Object> entry : params.entrySet()) {
@@ -84,11 +95,14 @@ public class BaseJpaRepositoryAdapter<T extends AbstractEntity<I>, I extends Ent
         return q.getResultList();
     }
 
+    @Transactional(readOnly = true)
     public List<T> query(String query) {
         return query(entityClass, query);
     }
 
+    @Transactional(readOnly = true)
     public List<T> query(String query, Map<String, Object> params) {
         return query(entityClass, query, params);
     }
+
 }

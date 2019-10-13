@@ -1,16 +1,12 @@
 package io.soffa.core.storage;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import io.soffa.core.exception.TechnicalException;
-import io.soffa.core.http.HttpProxyConfig;
 import io.soffa.core.lang.DateSupport;
 
 import java.io.InputStream;
@@ -22,6 +18,12 @@ public class S3StorageClient implements CloudStorageClient {
     private AmazonS3 s3client;
     private String defaultBucketName;
 
+    private S3StorageClient(AmazonS3 s3client, String defaultBucketName) {
+        this.s3client = s3client;
+        this.defaultBucketName = defaultBucketName;
+    }
+
+    /*
     public S3StorageClient(String endpoint, int port, String accessKey, String secretKey, String defaultBucketName) {
         this(endpoint, port, accessKey, secretKey);
         this.defaultBucketName = defaultBucketName;
@@ -44,25 +46,38 @@ public class S3StorageClient implements CloudStorageClient {
                 .standard()
                 .withClientConfiguration(config)
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://" + endpoint + ":" + port, ""))
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("https://" + endpoint + ":" + port, ""))
                 .build();
 
         } catch (Exception e) {
             throw new TechnicalException("MINIO_CLIENT_INIT_ERR", e.getMessage(), e);
         }
     }
+     */
+
+    public static S3StorageClient createDefault(String region, String accessKey, String secretKey, String defaultBucketName) {
+        AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+        AmazonS3 s3client = AmazonS3ClientBuilder
+            .standard()
+            .withRegion(region)
+            .withCredentials(new AWSStaticCredentialsProvider(credentials))
+            .build();
+        return new S3StorageClient(s3client, defaultBucketName);
+    }
+
 
     @Override
-    public void upload(InputStream source, String objectName, String contentType) {
-        upload(source, defaultBucketName, objectName, contentType);
+    public void upload(String objectName, InputStream source, String contentType, long contentLength) {
+        upload(defaultBucketName, objectName, source, contentType, contentLength);
     }
 
     @Override
-    public void upload(InputStream source, String bucket, String objectName, String contentType) {
+    public void upload(String bucket, String objectName, InputStream source, String contentType, long contentLength) {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentEncoding(StandardCharsets.UTF_8.name());
             metadata.setContentType(contentType);
+            metadata.setContentLength(contentLength);
             s3client.putObject(bucket, objectName, source, metadata);
         } catch (Exception e) {
             throw new TechnicalException("MINIO_UPLOAD_ERROR", e.getMessage(), e);
