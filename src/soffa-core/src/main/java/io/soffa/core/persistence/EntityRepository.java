@@ -5,6 +5,8 @@ import java.util.Optional;
 
 public interface EntityRepository<T extends AbstractEntity<I>, I extends EntityId> {
 
+    boolean isEmpty();
+
     T save(T entity);
 
     <S extends T> List<S> saveAll(Iterable<S> entities);
