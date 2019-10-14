@@ -24,3 +24,15 @@ spring:
         change-log: 'classpath:db/changelog/liquibase-changelog.xml'
 
 
+
+server.compression.enabled: true
+
+logging.level:
+    root: ${LOGGING_LEVEL_ROOT:INFO}
+    org.springframework: ${LOGGING_LEVEL_SPRING:INFO}
+    org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl: ERROR
+
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
+spring.datasource.hikari.connectionTimeout: 20000
+spring.datasource.hikari.maximumPoolSize: 5
+

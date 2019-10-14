@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,12 @@ public class BaseJpaRepositoryAdapter<T extends AbstractEntity<I>, I extends Ent
 
     @Override
     @Transactional(readOnly = true)
+    public boolean isEmpty() {
+        return count() == 0L;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Optional<T> findById(I id) {
         return internalRepository.findById(id);
     }
@@ -103,6 +110,24 @@ public class BaseJpaRepositoryAdapter<T extends AbstractEntity<I>, I extends Ent
     @Transactional(readOnly = true)
     public List<T> query(String query, Map<String, Object> params) {
         return query(entityClass, query, params);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<T> querySingle(String query, Map<String, Object> params) {
+        return querySingle(entityClass, query, params);
+    }
+
+    @Transactional(readOnly = true)
+    public <E> Optional<E> querySingle(Class<E> resultType, String query, Map<String, Object> params) {
+        Query q = em.createQuery(query, resultType);
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            q.setParameter(entry.getKey(), entry.getValue());
+        }
+        try {
+            return Optional.of((E)q.getSingleResult());
+        }catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
 }
