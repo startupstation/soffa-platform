@@ -22,10 +22,6 @@ subprojects {
   apply plugin: 'io.soffa.junit5'
   apply plugin: 'com.bmuschko.nexus'
 
-  repositories {
-    mavenCentral()
-  }
-
   modifyPom {
     project {
       name project.name
@@ -79,7 +75,7 @@ subprojects {
   // ------------------------------------------------------------------------------------------------------------------
 
   repositories {
-    mavenLocal()
+    // mavenLocal()
     mavenCentral()
     maven {
       url "https://oss.sonatype.org/content/groups/public"
