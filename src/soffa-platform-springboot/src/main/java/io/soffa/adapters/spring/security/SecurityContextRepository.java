@@ -1,5 +1,6 @@
 package io.soffa.adapters.spring.security;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
+@ConditionalOnBean(ReactiveAuthenticationManager.class)
 public class SecurityContextRepository implements ServerSecurityContextRepository {
 
     private ReactiveAuthenticationManager authenticationManager;
