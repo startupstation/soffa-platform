@@ -1,0 +1,10 @@
+apply plugin: "io.soffa.lombok"
+apply plugin: "io.soffa.spring"
+
+dependencies {
+  compile('org.springframework.boot:spring-boot-starter-test') {
+    exclude module: 'junit'
+    exclude group: 'com.vaadin.external.google'
+  }
+}
+
