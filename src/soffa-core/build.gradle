@@ -25,5 +25,6 @@ dependencies {
   compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.9'
   compile("com.konghq:unirest-java:3.0.00")
   compile 'net.jodah:failsafe:2.3.1'
-
+  compileOnly 'org.apache.qpid:qpid-broker:7.1.4'
+  compileOnly "org.junit.jupiter:junit-jupiter-api:5.5.2"
 }

@@ -1,6 +1,6 @@
 package io.soffa.core.persistence;
 
-import io.soffa.core.uuids.IDs;
+import io.soffa.core.commons.IDs;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

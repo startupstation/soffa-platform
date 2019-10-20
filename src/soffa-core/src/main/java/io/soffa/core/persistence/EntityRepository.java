@@ -17,7 +17,11 @@ public interface EntityRepository<T extends AbstractEntity<I>, I extends EntityI
 
     void deleteById(I id);
 
+    boolean existsById(I id);
+
     long count();
+
+    long countBy(String property, Object value);
 
     Optional<T> findById(I id);
 

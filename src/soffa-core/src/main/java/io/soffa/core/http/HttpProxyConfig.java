@@ -1,7 +1,7 @@
 package io.soffa.core.http;
 
 import io.soffa.core.exception.TechnicalException;
-import io.soffa.core.lang.StringSupport;
+import io.soffa.core.commons.StringSupport;
 import lombok.Getter;
 
 import java.net.MalformedURLException;

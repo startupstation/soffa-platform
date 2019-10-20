@@ -7,7 +7,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import io.soffa.core.exception.TechnicalException;
-import io.soffa.core.lang.DateSupport;
+import io.soffa.core.commons.DateSupport;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

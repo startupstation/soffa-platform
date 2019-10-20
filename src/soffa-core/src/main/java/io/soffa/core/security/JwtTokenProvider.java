@@ -8,7 +8,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.soffa.core.exception.TechnicalException;
-import io.soffa.core.lang.DateSupport;
+import io.soffa.core.commons.DateSupport;
 
 import java.util.Date;
 import java.util.Map;

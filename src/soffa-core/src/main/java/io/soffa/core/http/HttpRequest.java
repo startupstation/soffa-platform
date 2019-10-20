@@ -1,6 +1,6 @@
 package io.soffa.core.http;
 
-import io.soffa.core.JSON;
+import io.soffa.core.data.JSON;
 import kong.unirest.HttpRequestWithBody;
 import kong.unirest.ObjectMapper;
 import kong.unirest.Unirest;
