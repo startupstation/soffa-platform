@@ -5,7 +5,6 @@ buildscript {
     maven {
       url "https://oss.sonatype.org/content/groups/public"
     }
-    mavenLocal()
   }
 
   dependencies {
@@ -22,11 +21,6 @@ subprojects {
   apply plugin: 'io.soffa.java'
   apply plugin: 'io.soffa.junit5'
   apply plugin: 'com.bmuschko.nexus'
-
-  repositories {
-    mavenCentral()
-    mavenLocal()
-  }
 
   modifyPom {
     project {
@@ -81,7 +75,7 @@ subprojects {
   // ------------------------------------------------------------------------------------------------------------------
 
   repositories {
-    mavenLocal()
+    // mavenLocal()
     mavenCentral()
     maven {
       url "https://oss.sonatype.org/content/groups/public"
