@@ -2,7 +2,7 @@ apply plugin: "io.soffa.lombok"
 apply plugin: "io.soffa.spring"
 
 dependencies {
-  compile(project(":soffa-core"))
+  compile(project(":soffa-platform"))
   compileOnly "org.junit.jupiter:junit-jupiter-api:5.5.2"
   compileOnly "org.springframework.boot:spring-boot-starter-data-jpa"
   compileOnly "org.springframework.boot:spring-boot-starter-webflux"
