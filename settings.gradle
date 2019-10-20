@@ -1,8 +1,12 @@
 rootProject.name = 'soffa-platform'
 
 
-['soffa-platform',
- 'soffa-platform-springboot'
+['soffa-core',
+ 'soffa-web',
+ 'soffa-data-jpa',
+ 'soffa-rabbitmq',
+ 'soffa-security',
+ 'soffa-tests',
 ].each {
   include ":${it}"
   project(":${it}").projectDir = file("src/${it}")
