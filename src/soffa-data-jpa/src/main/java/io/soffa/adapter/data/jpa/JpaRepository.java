@@ -11,9 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.criteria.Predicate;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> implements EntityRepository<T, I> {
@@ -89,14 +92,44 @@ public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> impl
     }
 
     @Transactional(readOnly = true)
+    public List<T> findAllBy(Map<String, Serializable> params) {
+        return internalRepository.findAll((root, query, cb) -> {
+            List<Predicate> predicates = params.entrySet().stream().map(entry -> {
+                return cb.equal(root.get(entry.getKey()), entry.getValue());
+            }).collect(Collectors.toList());
+            return cb.and(predicates.toArray(new Predicate[0]));
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<T> findOneBy(Map<String, Serializable> params) {
+        return internalRepository.findOne((root, query, cb) -> {
+            List<Predicate> predicates = params.entrySet().stream().map(entry -> {
+                return cb.equal(root.get(entry.getKey()), entry.getValue());
+            }).collect(Collectors.toList());
+            return cb.and(predicates.toArray(new Predicate[0]));
+        });
+    }
+
+    @Transactional(readOnly = true)
     public <E> List<E> query(Class<E> resultType, String query) {
         return em.createQuery(query, resultType).getResultList();
     }
 
     @Transactional(readOnly = true)
-    public <E> List<E> query(Class<E> resultType, String query, Map<String, Object> params) {
+    public List<T> query(String query, Serializable... params) {
+        Query q = em.createQuery(query, entityClass);
+        for (int i = 0; i < params.length; i++) {
+            q.setParameter(i + 1, params[i]);
+        }
+        return q.getResultList();
+    }
+
+
+    @Transactional(readOnly = true)
+    public <E> List<E> query(Class<E> resultType, String query, Map<String, Serializable> params) {
         Query q = em.createQuery(query, resultType);
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
+        for (Map.Entry<String, Serializable> entry : params.entrySet()) {
             q.setParameter(entry.getKey(), entry.getValue());
         }
         return q.getResultList();
@@ -108,44 +141,76 @@ public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> impl
     }
 
     @Transactional(readOnly = true)
-    public List<T> query(String query, Map<String, Object> params) {
+    public List<T> query(String query, Map<String, Serializable> params) {
         return query(entityClass, query, params);
     }
 
     @Transactional(readOnly = true)
-    public Optional<T> queryOne(String query, Map<String, Object> params) {
+    public Optional<T> queryOne(String query, Map<String, Serializable> params) {
         return queryOne(entityClass, query, params);
     }
 
     @Transactional(readOnly = true)
-    public <E> Optional<E> queryOne(Class<E> resultType, String query, Map<String, Object> params) {
-        Query q = em.createQuery(query, resultType);
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            q.setParameter(entry.getKey(), entry.getValue());
+    public Optional<T> queryOne(String query, Serializable... params) {
+        Query q = em.createQuery(query, entityClass);
+        for (int i = 0; i < params.length; i++) {
+            q.setParameter(i+1, params[i]);
         }
         try {
-            return Optional.of((E)q.getSingleResult());
-        }catch (NoResultException e) {
+            return Optional.of((T) q.getSingleResult());
+        } catch (NoResultException e) {
             return Optional.empty();
         }
     }
 
     @Transactional(readOnly = true)
-    public Optional<T> findOne(String property, Object value) {
+    public <E> Optional<E> queryOne(Class<E> resultType, String query, Map<String, Serializable> params) {
+        Query q = em.createQuery(query, resultType);
+        for (Map.Entry<String, Serializable> entry : params.entrySet()) {
+            q.setParameter(entry.getKey(), entry.getValue());
+        }
+        try {
+            return Optional.of((E) q.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<T> findOne(String property, Serializable value) {
         return internalRepository.findOne((root, query, cb) -> {
             return cb.equal(root.get(property), value);
         });
     }
 
     @Transactional(readOnly = true)
-    public long countBy(String property, Object value) {
+    public long countBy(String property, Serializable value) {
         return internalRepository.count((root, query, cb) -> {
             return cb.equal(root.get(property), value);
         });
     }
 
     @Transactional(readOnly = true)
-    public boolean exists(String property, Object value) {
+    public long count(String query, Map<String, Serializable> params) {
+        Query q = em.createQuery("SELECT COUNT(*) " + query, Long.class);
+        for (Map.Entry<String, Serializable> entry : params.entrySet()) {
+            q.setParameter(entry.getKey(), entry.getValue());
+        }
+        return (Long) q.getSingleResult();
+    }
+
+    @Transactional(readOnly = true)
+    public long count(String query, Serializable... params) {
+        Query q = em.createQuery("SELECT COUNT(*) " + query, Long.class);
+        for (int i = 0; i < params.length; i++) {
+            q.setParameter(i + 1, params[i]);
+        }
+        return (Long) q.getSingleResult();
+    }
+
+
+    @Transactional(readOnly = true)
+    public boolean exists(String property, Serializable value) {
         return countBy(property, value) > 0;
     }
 

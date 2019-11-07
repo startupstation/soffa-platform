@@ -1,5 +1,6 @@
 package io.soffa.core.persistence;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public interface EntityRepository<T extends AbstractEntity<I>, I extends EntityI
 
     long count();
 
-    long countBy(String property, Object value);
+    long countBy(String property, Serializable value);
 
     Optional<T> findById(I id);
 
