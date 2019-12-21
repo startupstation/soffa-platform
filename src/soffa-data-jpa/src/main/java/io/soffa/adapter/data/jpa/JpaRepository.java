@@ -1,5 +1,6 @@
 package io.soffa.adapter.data.jpa;
 
+import com.google.common.collect.ImmutableMap;
 import io.soffa.core.commons.Reflection;
 import io.soffa.core.exception.TechnicalException;
 import io.soffa.core.persistence.AbstractEntity;
@@ -136,6 +137,15 @@ public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> impl
     }
 
     @Transactional(readOnly = true)
+    public List<Object[]> queryNative(String query, Map<String, Serializable> params) {
+        Query q = em.createNativeQuery(query);
+        for (Map.Entry<String, Serializable> entry : params.entrySet()) {
+            q.setParameter(entry.getKey(), entry.getValue());
+        }
+        return q.getResultList();
+    }
+
+    @Transactional(readOnly = true)
     public List<T> query(String query) {
         return query(entityClass, query);
     }
@@ -154,13 +164,18 @@ public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> impl
     public Optional<T> queryOne(String query, Serializable... params) {
         Query q = em.createQuery(query, entityClass);
         for (int i = 0; i < params.length; i++) {
-            q.setParameter(i+1, params[i]);
+            q.setParameter(i + 1, params[i]);
         }
         try {
             return Optional.of((T) q.getSingleResult());
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+
+    @Transactional(readOnly = true)
+    public <E> Optional<E> queryOne(Class<E> resultType, String query) {
+        return queryOne(resultType, query, ImmutableMap.of());
     }
 
     @Transactional(readOnly = true)
@@ -192,7 +207,8 @@ public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> impl
 
     @Transactional(readOnly = true)
     public long count(String query, Map<String, Serializable> params) {
-        Query q = em.createQuery("SELECT COUNT(*) " + query, Long.class);
+        String prefix = query.toLowerCase().contains("select ") ? "" : "SELECT COUNT(*) ";
+        Query q = em.createQuery(prefix + query, Long.class);
         for (Map.Entry<String, Serializable> entry : params.entrySet()) {
             q.setParameter(entry.getKey(), entry.getValue());
         }
@@ -201,7 +217,8 @@ public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> impl
 
     @Transactional(readOnly = true)
     public long count(String query, Serializable... params) {
-        Query q = em.createQuery("SELECT COUNT(*) " + query, Long.class);
+        String prefix = query.toLowerCase().contains("select ") ? "" : "SELECT COUNT(*) ";
+        Query q = em.createQuery(prefix + query, Long.class);
         for (int i = 0; i < params.length; i++) {
             q.setParameter(i + 1, params[i]);
         }
