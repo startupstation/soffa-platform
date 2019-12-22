@@ -96,7 +96,11 @@ public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> impl
     public List<T> findAllBy(Map<String, Serializable> params) {
         return internalRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = params.entrySet().stream().map(entry -> {
-                return cb.equal(root.get(entry.getKey()), entry.getValue());
+                if (entry.getValue() == null) {
+                    return cb.isNull(root.get(entry.getKey()));
+                } else {
+                    return cb.equal(root.get(entry.getKey()), entry.getValue());
+                }
             }).collect(Collectors.toList());
             return cb.and(predicates.toArray(new Predicate[0]));
         });
@@ -106,7 +110,11 @@ public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> impl
     public Optional<T> findOneBy(Map<String, Serializable> params) {
         return internalRepository.findOne((root, query, cb) -> {
             List<Predicate> predicates = params.entrySet().stream().map(entry -> {
-                return cb.equal(root.get(entry.getKey()), entry.getValue());
+                if (entry.getValue() == null) {
+                    return cb.isNull(root.get(entry.getKey()));
+                } else {
+                    return cb.equal(root.get(entry.getKey()), entry.getValue());
+                }
             }).collect(Collectors.toList());
             return cb.and(predicates.toArray(new Predicate[0]));
         });
