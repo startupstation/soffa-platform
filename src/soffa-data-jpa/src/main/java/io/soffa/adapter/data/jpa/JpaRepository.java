@@ -6,6 +6,7 @@ import io.soffa.core.exception.TechnicalException;
 import io.soffa.core.persistence.AbstractEntity;
 import io.soffa.core.persistence.EntityId;
 import io.soffa.core.persistence.EntityRepository;
+import io.soffa.core.persistence.Paging;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -131,6 +132,19 @@ public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> impl
         for (int i = 0; i < params.length; i++) {
             q.setParameter(i + 1, params[i]);
         }
+        return q.getResultList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<T> query(String query, Paging paging, Serializable... params) {
+        Query q = em.createQuery(query, entityClass);
+        for (int i = 0; i < params.length; i++) {
+            q.setParameter(i + 1, params[i]);
+        }
+        if (paging.getPage() > 1) {
+            q.setFirstResult(paging.getPage() - 1 * paging.getCount());
+        }
+        q.setMaxResults(paging.getCount());
         return q.getResultList();
     }
 
