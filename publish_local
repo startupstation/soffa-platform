@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-gradle uploadArchives -Prelease=false && sync
+gradle uploadArchives && sync

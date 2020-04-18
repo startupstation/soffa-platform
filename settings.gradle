@@ -1,6 +1,5 @@
 rootProject.name = 'soffa-platform'
 
-
 ['soffa-core',
  'soffa-web',
  'soffa-data-jpa',

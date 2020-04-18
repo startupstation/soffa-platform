@@ -19,10 +19,10 @@ plugins {
 }
 
 subprojects {
+
   apply plugin: 'io.soffa.java'
   apply plugin: 'io.soffa.junit5'
   apply plugin: 'com.bmuschko.nexus'
-  apply plugin: 'maven-publish'
 
   modifyPom {
     project {
@@ -63,14 +63,15 @@ subprojects {
   extraArchive {
     sources = true
     tests = false
-    javadoc = true
   }
 
   nexus {
-    sign = true
-    if (!project.findProperty("release")) {
+    if (!(project.findProperty("release") ?: false)) {
+      sign = false
       repositoryUrl = "file:${System.getProperty("user.home")}/.m2/repository"
       snapshotRepositoryUrl = "file:${System.getProperty("user.home")}/.m2/repository"
+    }else {
+      sign = true
     }
   }
 
