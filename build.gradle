@@ -1,6 +1,7 @@
 buildscript {
 
   repositories {
+    mavenLocal()
     mavenCentral()
     maven {
       url "https://oss.sonatype.org/content/groups/public"
@@ -8,7 +9,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "io.soffa.gradle:soffa-gradle-plugin:0.2.0"
+    classpath "io.soffa.gradle:soffa-gradle-plugin:0.2.2"
     classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
   }
 }
@@ -21,6 +22,7 @@ subprojects {
   apply plugin: 'io.soffa.java'
   apply plugin: 'io.soffa.junit5'
   apply plugin: 'com.bmuschko.nexus'
+  apply plugin: 'maven-publish'
 
   modifyPom {
     project {
