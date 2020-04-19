@@ -142,9 +142,9 @@ public class JpaRepository<T extends AbstractEntity<I>, I extends EntityId> impl
             q.setParameter(i + 1, params[i]);
         }
         if (paging.getPage() > 1) {
-            q.setFirstResult(paging.getPage() - 1 * paging.getCount());
+            q.setFirstResult(paging.getPage() - 1 * paging.getSize());
         }
-        q.setMaxResults(paging.getCount());
+        q.setMaxResults(paging.getSize());
         return q.getResultList();
     }
 

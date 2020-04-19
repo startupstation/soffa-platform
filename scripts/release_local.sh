@@ -1,4 +1,3 @@
 #!/bin/bash
 
-gradle clean install uploadArchives
-sync
+gradle clean build publishToMavenLocal && sync
