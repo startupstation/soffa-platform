@@ -1,8 +1,0 @@
-apply plugin: "io.soffa.lombok"
-apply plugin: "io.soffa.spring"
-
-dependencies {
-  compile(project(":soffa-core"))
-  compile 'org.springframework.boot:spring-boot-starter-amqp'
-}
-

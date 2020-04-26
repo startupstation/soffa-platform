@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("io.soffa.tools:soffa-gradle-plugin:0.2.5")
+        classpath("io.soffa.tools:soffa-gradle-plugin:1.0.3-1")
         classpath("de.marcphilipp.gradle:nexus-publish-plugin:0.4.0")
     }
 }
@@ -18,6 +18,8 @@ plugins {
 }
 
 subprojects {
+
+    val project = this
 
     apply(plugin = "io.soffa.java")
     apply(plugin = "io.soffa.junit5")
@@ -29,12 +31,10 @@ subprojects {
         withSourcesJar()
     }
 
-    var publication:Publication? = null
-
     configure<PublishingExtension> {
         publications {
-            publication = create<MavenPublication>("mavenJava") {
-                from(components["java"])
+            create("mavenJava", MavenPublication::class) {
+                from(project.components["java"])
                 pom {
                     name.set(project.name)
                     description.set(project.description)
@@ -78,7 +78,6 @@ subprojects {
                         }
                     }
                 }
-
             }
         }
         configure<de.marcphilipp.gradle.nexus.NexusPublishExtension> {
@@ -89,10 +88,9 @@ subprojects {
     }
 
     configure<SigningExtension> {
-        sign(publication!!)
+        val publishing = project.extensions.getByName("publishing") as PublishingExtension
+        sign(publishing.publications["mavenJava"])
     }
-
-    // ------------------------------------------------------------------------------------------------------------------
 
     repositories {
         mavenCentral()
@@ -110,6 +108,4 @@ nexusStaging {
     username = project.findProperty("sonatypeUsername")?.toString()
     password = project.findProperty("sonatypePassword")?.toString()
 }
-
-
 
