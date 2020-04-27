@@ -1,5 +1,6 @@
 package io.soffa.platform.core.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,11 @@ public abstract class ValueModel implements Serializable {
 
     @Column(name = "id")
     private String value;
+
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
 
     @Override
     public String toString() {
