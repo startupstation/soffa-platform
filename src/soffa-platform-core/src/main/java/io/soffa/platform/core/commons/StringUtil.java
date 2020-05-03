@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class StringSupport {
+public class StringUtil {
 
-    private StringSupport() {
+    private StringUtil() {
     }
 
     public static String toString(InputStream stream) throws IOException {

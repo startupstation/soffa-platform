@@ -1,54 +1,87 @@
 package io.soffa.platform.gateways.security;
 
-import io.soffa.platform.core.security.PasswordEncoder;
+import io.soffa.platform.core.security.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.context.ServerSecurityContextRepository;
-import reactor.core.publisher.Mono;
+import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Configuration
+@EnableReactiveMethodSecurity
 public class SecurityBeansFactory {
 
+    @Bean
+    GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
+    }
 
-    private Environment environment;
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, TokenProvider tokenProvider) {
 
+        http
+            //.exceptionHandling()
+            //.authenticationEntryPoint((exchange, e) -> Mono.from(s -> exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)))
+            //.accessDeniedHandler((exchange, denied) -> Mono.from(s -> exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN)))
+            //.and()
+            .csrf().disable()
+            //.securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
+            .authorizeExchange()
+            .pathMatchers(HttpMethod.OPTIONS).permitAll()
+            .pathMatchers("/actuator/health").permitAll()
+            .pathMatchers("/actuator/info").permitAll()
+            .anyExchange().authenticated()
+            .and()
+            .addFilterAt(bearerAuthenticationFilter(tokenProvider), SecurityWebFiltersOrder.AUTHENTICATION);
+
+        return http.build();
+    }
+
+    private AuthenticationWebFilter bearerAuthenticationFilter(TokenProvider tokenProvider){
+        AuthenticationWebFilter bearerAuthenticationFilter;
+        ReactiveAuthenticationManager authManager = new BearerTokenReactiveAuthenticationManager();
+        bearerAuthenticationFilter = new AuthenticationWebFilter(authManager);
+        bearerAuthenticationFilter.setServerAuthenticationConverter(new ServerHttpBearerAuthenticationConverter(tokenProvider));
+        bearerAuthenticationFilter.setRequiresAuthenticationMatcher(ServerWebExchangeMatchers.pathMatchers("/**"));
+        return bearerAuthenticationFilter;
+    }
+
+    /*
     private final ReactiveAuthenticationManager authenticationManager;
-
     private final ServerSecurityContextRepository securityContextRepository;
 
-    public SecurityBeansFactory(Environment environment, ReactiveAuthenticationManager authenticationManager, ServerSecurityContextRepository securityContextRepository) {
-        this.environment = environment;
+    public SecurityBeansFactory(ReactiveAuthenticationManager authenticationManager, ServerSecurityContextRepository securityContextRepository) {
         this.authenticationManager = authenticationManager;
         this.securityContextRepository = securityContextRepository;
     }
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        return http.cors().disable()
+            .exceptionHandling()
+            .authenticationEntryPoint((exchange, e) -> Mono.from(s -> exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)))
+            .accessDeniedHandler((exchange, denied) -> Mono.from(s -> exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN)))
+            .and()
+            .csrf().disable()
+            .authenticationManager(authenticationManager)
+            .securityContextRepository(securityContextRepository)
+            .authorizeExchange()
+            .pathMatchers(HttpMethod.OPTIONS).permitAll()
+            .pathMatchers("/actuator/health").permitAll()
+            .pathMatchers("/actuator/info").permitAll()
+            .anyExchange().authenticated().and()
+            .build();
+    }
 
+    /*
         boolean isEnabled = Boolean.parseBoolean(environment.getProperty("application.security.enabled", "false"));
-
-        if (isEnabled) {
-
-            return http.cors().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint((exchange, e) -> Mono.from(s -> exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)))
-                .accessDeniedHandler((exchange, denied) -> Mono.from(s -> exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN)))
-                .and()
-                .csrf().disable()
-                .authenticationManager(authenticationManager)
-                .securityContextRepository(securityContextRepository)
-                .authorizeExchange()
-                .pathMatchers("/api/**").authenticated()
-                .anyExchange().permitAll()
-                .and()
-                .build();
         } else {
             return http.cors().disable()
                 .exceptionHandling()
@@ -60,6 +93,7 @@ public class SecurityBeansFactory {
         }
     }
 
+    /*
     @Bean
     public PasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -77,5 +111,5 @@ public class SecurityBeansFactory {
 
         };
     }
-
+    */
 }

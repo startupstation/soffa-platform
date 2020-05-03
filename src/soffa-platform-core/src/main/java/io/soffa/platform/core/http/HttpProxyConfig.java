@@ -1,7 +1,7 @@
 package io.soffa.platform.core.http;
 
+import io.soffa.platform.core.commons.StringUtil;
 import io.soffa.platform.core.exception.TechnicalException;
-import io.soffa.platform.core.commons.StringSupport;
 import lombok.Getter;
 
 import java.net.MalformedURLException;
@@ -29,14 +29,14 @@ public class HttpProxyConfig {
 
     public static HttpProxyConfig getProxy() {
         String proxy = System.getProperty("http.proxy");
-        if (StringSupport.isNullOrEmpty(proxy)) {
+        if (StringUtil.isNullOrEmpty(proxy)) {
             proxy = System.getenv("https_proxy");
         }
-        if (StringSupport.isNullOrEmpty(proxy)) {
+        if (StringUtil.isNullOrEmpty(proxy)) {
             proxy = System.getenv("http_proxy");
         }
 
-        if (StringSupport.isNullOrEmpty(proxy)) {
+        if (StringUtil.isNullOrEmpty(proxy)) {
             return null;
         } else {
             return parse(proxy);

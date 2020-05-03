@@ -6,8 +6,8 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import io.soffa.platform.core.exception.TechnicalException;
 import io.soffa.platform.core.commons.DateSupport;
+import io.soffa.platform.core.exception.TechnicalException;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

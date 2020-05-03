@@ -9,7 +9,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3")
     implementation("commons-io:commons-io:2.6")
     implementation("com.amazonaws:aws-java-sdk-s3:1.11.638")
-
+    api("io.projectreactor:reactor-core:3.3.5.RELEASE")
     api("com.auth0:java-jwt:3.8.3")
     api("javax.persistence:javax.persistence-api:2.2")
     api("javax.transaction:javax.transaction-api:1.3")

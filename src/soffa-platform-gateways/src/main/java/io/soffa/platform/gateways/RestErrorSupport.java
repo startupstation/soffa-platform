@@ -2,6 +2,7 @@ package io.soffa.platform.gateways;
 
 import io.soffa.platform.core.security.InvalidAuthException;
 import org.apache.http.HttpStatus;
+
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Map;
 

@@ -1,9 +1,8 @@
-package io.soffa.platform.core.commons;
+package io.soffa.platform.core.data;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapLikeType;
-import io.soffa.platform.core.data.JSON;
 import io.soffa.platform.core.exception.TechnicalException;
 
 import javax.persistence.AttributeConverter;

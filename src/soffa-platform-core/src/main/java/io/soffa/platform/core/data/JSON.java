@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.MapLikeType;
+import com.fasterxml.jackson.module.kotlin.KotlinModule;
 import io.soffa.platform.core.commons.Collections;
 import io.soffa.platform.core.exception.TechnicalException;
-import com.fasterxml.jackson.module.kotlin.*;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
