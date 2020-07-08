@@ -35,9 +35,7 @@ public class SecurityBeansFactory {
             //.securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
             .authorizeExchange()
             .pathMatchers(HttpMethod.OPTIONS).permitAll()
-            .pathMatchers("/actuator/health").permitAll()
-            .pathMatchers("/actuator/info").permitAll()
-            .anyExchange().authenticated()
+            .pathMatchers("/**").permitAll()
             .and()
             .addFilterAt(bearerAuthenticationFilter(tokenProvider), SecurityWebFiltersOrder.AUTHENTICATION);
 

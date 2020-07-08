@@ -2,9 +2,9 @@ rootProject.name = "soffa-platform"
 
 include(
     "soffa-platform-core",
-    "soffa-platform-gateways",
-    "soffa-platform-pubsub",
-    "soffa-platform-tests"
+    "soffa-platform-springboot",
+    "soffa-platform-springboot-pubsub",
+    "soffa-platform-springboot-tests"
 )
 
 for (project in rootProject.children) {

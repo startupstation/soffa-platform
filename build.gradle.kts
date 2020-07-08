@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("io.soffa.tools:soffa-gradle-plugin:1.0.3-1")
+        classpath("io.soffa.gradle:soffa-gradle-plugin:1.1.3")
         classpath("de.marcphilipp.gradle:nexus-publish-plugin:0.4.0")
     }
 }
@@ -16,6 +16,8 @@ buildscript {
 plugins {
     id("io.codearte.nexus-staging").version("0.21.2")
 }
+
+apply(plugin = "idea")
 
 subprojects {
 
@@ -99,7 +101,6 @@ subprojects {
         }
         jcenter()
     }
-
 }
 
 nexusStaging {
