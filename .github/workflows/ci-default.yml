@@ -9,9 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: gradle:6.3-jdk8
+    container: gradle:latest
     steps:
       - uses: actions/checkout@v1
       - name: Build project
         run: |
-          gradle check
+          gradle check --watch-fs

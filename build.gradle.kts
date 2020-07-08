@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        mavenLocal()
+        // mavenLocal()
         mavenCentral()
         maven {
             setUrl("https://oss.sonatype.org/content/groups/public")
