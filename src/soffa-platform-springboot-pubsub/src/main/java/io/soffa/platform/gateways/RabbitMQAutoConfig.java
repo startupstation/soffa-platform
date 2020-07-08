@@ -1,10 +1,12 @@
 package io.soffa.platform.gateways;
 
+import com.github.fridujo.rabbitmq.mock.MockConnectionFactory;
 import io.soffa.platform.core.data.JSON;
 import io.soffa.platform.core.pubsub.PubSubListener;
 import io.soffa.platform.core.pubsub.SimpleEvent;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +35,6 @@ public class RabbitMQAutoConfig {
     }
 
     @Bean
-    @Profile("!test")
     CustomExchange delayExchange() {
         Map<String, Object> args = new HashMap<>();
         args.put("x-delayed-type", "direct");
@@ -41,7 +42,6 @@ public class RabbitMQAutoConfig {
     }
 
     @Bean
-    @Profile("!test")
     Binding binding(Queue queue, Exchange delayExchange) {
         return BindingBuilder.bind(queue).to(delayExchange).with("default").noargs();
     }

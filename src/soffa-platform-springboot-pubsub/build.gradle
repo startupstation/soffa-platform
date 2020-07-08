@@ -4,5 +4,6 @@ apply plugin: "io.soffa.spring"
 dependencies {
   compile(project(":soffa-platform-core"))
   compile 'org.springframework.boot:spring-boot-starter-amqp'
+  implementation("com.github.fridujo:rabbitmq-mock:1.1.0")
 }
 
