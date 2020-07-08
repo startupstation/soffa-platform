@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("io.soffa.gradle:soffa-gradle-plugin:1.1.4")
+        classpath("io.soffa.gradle:soffa-gradle-plugin:1.1.5")
         classpath("de.marcphilipp.gradle:nexus-publish-plugin:0.4.0")
     }
 }
@@ -106,6 +106,8 @@ subprojects {
 nexusStaging {
     packageGroup = "io.soffa"
     stagingProfileId = "c1ae699bac03ae"
+    numberOfRetries = 60
+    delayBetweenRetriesInMillis = 5000
     username = project.findProperty("sonatypeUsername")?.toString()
     password = project.findProperty("sonatypePassword")?.toString()
 }
