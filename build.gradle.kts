@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("io.soffa.gradle:soffa-gradle-plugin:1.1.3")
+        classpath("io.soffa.gradle:soffa-gradle-plugin:1.1.4")
         classpath("de.marcphilipp.gradle:nexus-publish-plugin:0.4.0")
     }
 }

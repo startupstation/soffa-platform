@@ -12,9 +12,9 @@ jobs:
         container: gradle:latest
         steps:
             - uses: actions/checkout@v1
-            - name: Build
+            - name: Check
               run: |
-                  gradle check
+                  gradle check --watch-fs
             - name: Sonatype:Release
               env:
                   NEXUS_USERNAME: ${{ secrets.MAVEN_PUBLIC_USERNAME }}
