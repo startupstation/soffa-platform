@@ -46,8 +46,8 @@ subprojects {
                 name = "GitHubPackagesPublish"
                 setUrl("https://maven.pkg.github.com/startupstation/artifacts")
                 credentials {
-                    username = System.getenv("MVN_USERNAME")
-                    password = System.getenv("MVN_PASSWORD")
+                    username = project.findProperty("mvnUsername").toString()
+                    password = project.findProperty("mvnPassword").toString()
                 }
             }
         }
