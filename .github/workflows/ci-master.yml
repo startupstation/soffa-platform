@@ -17,12 +17,13 @@ jobs:
       - name: Check
         run: gradle check
       - name: Publish
+        env:
+          MVN_USERNAME: ${{ env.GITHUB_ACTOR }}
+          MVN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo $GITHUB_ACTOR
-          echo $GITHUB_TOKEN
-          echo $MVN_USERNAME
-          echo $MVN_PASSWORD
-          gradle publish -PmvnUsername=$MVN_USERNAME -PmvnPassword=$MVN_PASSWORD
+          echo MVN_USERNAME=$MVN_USERNAME
+          echo MVN_PASSWORD=$MVN_PASSWORD
+          gradle publish -PmvnUsername=${GITHUB_ACTOR} -PmvnPassword=${MVN_PASSWORD}
 #            - name: Sonatype:Release
 #              env:
 #                  NEXUS_USERNAME: ${{ secrets.MAVEN_PUBLIC_USERNAME }}
