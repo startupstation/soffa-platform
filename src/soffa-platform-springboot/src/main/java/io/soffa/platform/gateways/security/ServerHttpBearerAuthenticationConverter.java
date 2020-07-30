@@ -1,7 +1,9 @@
 package io.soffa.platform.gateways.security;
 
+import io.soffa.platform.core.commons.StringUtil;
 import io.soffa.platform.core.security.TokenProvider;
 import io.soffa.platform.core.security.model.DecodedToken;
+import io.soffa.platform.core.security.model.UserPrincipal;
 import org.apache.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,7 +41,7 @@ public class ServerHttpBearerAuthenticationConverter implements ServerAuthentica
                     return Mono.just(ANONYMOUS);
                 }
                 String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-                if (!authHeader.startsWith(BEARER)) {
+                if (StringUtil.isNullOrEmpty(authHeader) || !authHeader.startsWith(BEARER)) {
                     return Mono.just(ANONYMOUS);
                 }
                 return tokenProvider.decode(authHeader.substring(BEARER.length()))
@@ -51,12 +53,14 @@ public class ServerHttpBearerAuthenticationConverter implements ServerAuthentica
                         }
 
                         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+                        authorities.add(new SimpleGrantedAuthority("user"));
                         if (decodedToken.getRoles() != null) {
                             for (String role : decodedToken.getRoles()) {
                                 authorities.add(new SimpleGrantedAuthority(role));
                             }
                         }
-                        return new UsernamePasswordAuthenticationToken(decodedToken.getUsername(), null, authorities);
+                        UserPrincipal principal = new UserPrincipal(decodedToken.getUsername(), decodedToken.getEmail(), decodedToken.getRoles());
+                        return new UsernamePasswordAuthenticationToken(principal, null, authorities);
                     });
             });
     }
