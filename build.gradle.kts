@@ -5,6 +5,10 @@ buildscript {
         maven {
             name = "GitHubPackages"
             setUrl("https://maven.pkg.github.com/startupstation/artifacts")
+            credentials {
+                username = "public"
+                password = "c5dcf5af86c496cf11ecc1291c39c8f7619b642e"
+            }
         }
     }
 
