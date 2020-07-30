@@ -3,7 +3,8 @@ buildscript {
         mavenLocal()
         mavenCentral()
         maven {
-            setUrl("https://oss.sonatype.org/content/groups/public")
+            name = "GitHubPackages"
+            setUrl("https://maven.pkg.github.com/startupstation/mvn-public")
         }
     }
 
@@ -34,6 +35,16 @@ subprojects {
     }
 
     configure<PublishingExtension> {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                setUrl("https://maven.pkg.github.com/startupstation/mvn-public")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
         publications {
             create("mavenJava", MavenPublication::class) {
                 from(project.components["java"])
@@ -83,6 +94,7 @@ subprojects {
             }
         }
         configure<de.marcphilipp.gradle.nexus.NexusPublishExtension> {
+            clientTimeout.set(java.time.Duration.ofSeconds(90))
             repositories {
                 sonatype()
             }
@@ -97,6 +109,10 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        maven {
+            name = "GitHubPackages"
+            setUrl("https://maven.pkg.github.com/startupstation/mvn-public")
+        }
         maven {
             setUrl("https://oss.sonatype.org/content/groups/public")
         }
