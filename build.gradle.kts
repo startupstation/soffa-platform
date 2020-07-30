@@ -43,11 +43,11 @@ subprojects {
     configure<PublishingExtension> {
         repositories {
             maven {
-                name = "GitHubPackagesRelease"
+                name = "GitHubPackagesPublish"
                 setUrl("https://maven.pkg.github.com/startupstation/artifacts")
                 credentials {
                     username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
+                    password = System.getenv("STATION_RELEASE_TOKEN")
                 }
             }
         }
