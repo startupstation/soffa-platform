@@ -17,10 +17,12 @@ buildscript {
         classpath("de.marcphilipp.gradle:nexus-publish-plugin:0.4.0")
     }
 }
+/*
 
 plugins {
     id("io.codearte.nexus-staging").version("0.21.2")
 }
+*/
 
 apply(plugin = "idea")
 
@@ -30,8 +32,8 @@ subprojects {
 
     apply(plugin = "io.soffa.java")
     apply(plugin = "io.soffa.junit5")
-    apply(plugin = "signing")
-    apply(plugin = "de.marcphilipp.nexus-publish")
+    apply(plugin = "maven-publish")
+    //apply(plugin = "de.marcphilipp.nexus-publish")
 
     configure<JavaPluginExtension> {
         withJavadocJar()
@@ -97,18 +99,18 @@ subprojects {
                 }
             }
         }
-        configure<de.marcphilipp.gradle.nexus.NexusPublishExtension> {
+        /*configure<de.marcphilipp.gradle.nexus.NexusPublishExtension> {
             clientTimeout.set(java.time.Duration.ofSeconds(90))
             repositories {
                 sonatype()
             }
-        }
+        }*/
     }
 
-    configure<SigningExtension> {
+    /*configure<SigningExtension> {
         val publishing = project.extensions.getByName("publishing") as PublishingExtension
         sign(publishing.publications["mavenJava"])
-    }
+    }*/
 
     repositories {
         // mavenLocal()
@@ -117,12 +119,10 @@ subprojects {
             name = "GitHubPackages"
             setUrl("https://maven.pkg.github.com/startupstation/artifacts")
         }
-        maven {
-            setUrl("https://oss.sonatype.org/content/groups/public")
-        }
         jcenter()
     }
 }
+/*
 
 nexusStaging {
     packageGroup = "io.soffa"
@@ -133,3 +133,4 @@ nexusStaging {
     password = project.findProperty("sonatypePassword")?.toString()
 }
 
+*/
