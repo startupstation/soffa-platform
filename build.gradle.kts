@@ -5,7 +5,6 @@ buildscript {
         maven {
             name = "GitHubPackages"
             setUrl("https://maven.pkg.github.com/startupstation/artifacts")
-
         }
     }
 
