@@ -1,10 +1,11 @@
 buildscript {
     repositories {
-        mavenLocal()
+        // mavenLocal()
         mavenCentral()
         maven {
             name = "GitHubPackages"
-            setUrl("https://maven.pkg.github.com/startupstation/mvn-public")
+            setUrl("https://maven.pkg.github.com/startupstation/artifacts")
+
         }
     }
 
@@ -38,7 +39,7 @@ subprojects {
         repositories {
             maven {
                 name = "GitHubPackages"
-                setUrl("https://maven.pkg.github.com/startupstation/mvn-public")
+                setUrl("https://maven.pkg.github.com/startupstation/artifacts")
                 credentials {
                     username = System.getenv("GITHUB_ACTOR")
                     password = System.getenv("GITHUB_TOKEN")
@@ -107,11 +108,11 @@ subprojects {
     }
 
     repositories {
-        mavenLocal()
+        // mavenLocal()
         mavenCentral()
         maven {
             name = "GitHubPackages"
-            setUrl("https://maven.pkg.github.com/startupstation/mvn-public")
+            setUrl("https://maven.pkg.github.com/startupstation/artifacts")
         }
         maven {
             setUrl("https://oss.sonatype.org/content/groups/public")
