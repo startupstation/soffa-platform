@@ -3,6 +3,7 @@ package io.soffa.platform.gateways.security;
 import io.soffa.platform.core.commons.StringUtil;
 import io.soffa.platform.core.security.TokenProvider;
 import io.soffa.platform.core.security.model.DecodedToken;
+import io.soffa.platform.core.security.model.UserId;
 import io.soffa.platform.core.security.model.UserPrincipal;
 import org.apache.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,7 @@ public class ServerHttpBearerAuthenticationConverter implements ServerAuthentica
 
     private static final String BEARER = "Bearer ";
 
+    private final UserLoader userResolver;
     private final TokenProvider tokenProvider;
 
     private static final Authentication ANONYMOUS = new UsernamePasswordAuthenticationToken(
@@ -29,8 +31,9 @@ public class ServerHttpBearerAuthenticationConverter implements ServerAuthentica
         Collections.singletonList(new SimpleGrantedAuthority("guest"))
     );
 
-    public ServerHttpBearerAuthenticationConverter(TokenProvider tokenProvider) {
+    public ServerHttpBearerAuthenticationConverter(TokenProvider tokenProvider, UserLoader userResolver) {
         this.tokenProvider = tokenProvider;
+        this.userResolver = userResolver;
     }
 
     @Override
@@ -59,7 +62,12 @@ public class ServerHttpBearerAuthenticationConverter implements ServerAuthentica
                                 authorities.add(new SimpleGrantedAuthority(role));
                             }
                         }
-                        UserPrincipal principal = new UserPrincipal(decodedToken.getUsername(), decodedToken.getEmail(), decodedToken.getRoles());
+                        UserId userId = new UserId(decodedToken.getUsername());
+                        if (userResolver != null) {
+                            userId = userResolver.loadUserId(decodedToken.getUsername()).orElse(userId);
+                        }
+                        UserPrincipal principal = new UserPrincipal(userId, decodedToken.getEmail(), decodedToken.getRoles());
+
                         return new UsernamePasswordAuthenticationToken(principal, null, authorities);
                     });
             });

@@ -1,6 +1,7 @@
 package io.soffa.platform.gateways.security;
 
 import io.soffa.platform.core.security.TokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,6 +18,9 @@ import org.springframework.security.web.server.util.matcher.ServerWebExchangeMat
 @Configuration
 @EnableReactiveMethodSecurity
 public class SecurityBeansFactory {
+
+    @Autowired(required = false)
+    private UserLoader userLoader;
 
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
@@ -46,7 +50,7 @@ public class SecurityBeansFactory {
         AuthenticationWebFilter bearerAuthenticationFilter;
         ReactiveAuthenticationManager authManager = new BearerTokenReactiveAuthenticationManager();
         bearerAuthenticationFilter = new AuthenticationWebFilter(authManager);
-        bearerAuthenticationFilter.setServerAuthenticationConverter(new ServerHttpBearerAuthenticationConverter(tokenProvider));
+        bearerAuthenticationFilter.setServerAuthenticationConverter(new ServerHttpBearerAuthenticationConverter(tokenProvider, userLoader));
         bearerAuthenticationFilter.setRequiresAuthenticationMatcher(ServerWebExchangeMatchers.pathMatchers("/**"));
         return bearerAuthenticationFilter;
     }
