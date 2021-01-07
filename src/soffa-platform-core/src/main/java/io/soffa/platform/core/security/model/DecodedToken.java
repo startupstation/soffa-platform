@@ -11,6 +11,7 @@ public class DecodedToken {
 
     private String token;
     private String username;
+    private String email;
     private Set<String> roles;
 
     public DecodedToken(String token) {

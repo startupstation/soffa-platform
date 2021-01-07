@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gradle clean build publishToMavenLocal && sync
+gradle build publishToMavenLocal "$@" --watch-fs && sync

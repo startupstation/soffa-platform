@@ -1,21 +1,22 @@
 buildscript {
     repositories {
-        // mavenLocal()
+        mavenLocal()
         mavenCentral()
         maven {
-            setUrl("https://oss.sonatype.org/content/groups/public")
+            name = "GitHubPackages"
+            setUrl("https://maven.pkg.github.com/startupstation/artifacts")
+            credentials {
+                username = "${GH_MVN_USER}"
+                password = "${GH_MVN_PASSWORD}"
+            }
         }
     }
 
     dependencies {
-        classpath("io.soffa.gradle:soffa-gradle-plugin:1.1.3")
-        classpath("de.marcphilipp.gradle:nexus-publish-plugin:0.4.0")
+        classpath("io.soffa.gradle:soffa-gradle-plugin:1.1.7")
     }
 }
 
-plugins {
-    id("io.codearte.nexus-staging").version("0.21.2")
-}
 
 apply(plugin = "idea")
 
@@ -25,8 +26,7 @@ subprojects {
 
     apply(plugin = "io.soffa.java")
     apply(plugin = "io.soffa.junit5")
-    apply(plugin = "signing")
-    apply(plugin = "de.marcphilipp.nexus-publish")
+    apply(plugin = "maven-publish")
 
     configure<JavaPluginExtension> {
         withJavadocJar()
@@ -34,6 +34,16 @@ subprojects {
     }
 
     configure<PublishingExtension> {
+        repositories {
+            maven {
+                name = "GitHubPackagesPublish"
+                setUrl("https://maven.pkg.github.com/startupstation/artifacts")
+                credentials {
+                    username = project.findProperty("mvnUsername").toString()
+                    password = project.findProperty("mvnPassword").toString()
+                }
+            }
+        }
         publications {
             create("mavenJava", MavenPublication::class) {
                 from(project.components["java"])
@@ -81,32 +91,16 @@ subprojects {
                     }
                 }
             }
-        }
-        configure<de.marcphilipp.gradle.nexus.NexusPublishExtension> {
-            repositories {
-                sonatype()
-            }
-        }
-    }
-
-    configure<SigningExtension> {
-        val publishing = project.extensions.getByName("publishing") as PublishingExtension
-        sign(publishing.publications["mavenJava"])
+      
     }
 
     repositories {
+        // mavenLocal()
         mavenCentral()
         maven {
-            setUrl("https://oss.sonatype.org/content/groups/public")
+            name = "GitHubPackages"
+            setUrl("https://maven.pkg.github.com/startupstation/artifacts")
         }
         jcenter()
     }
 }
-
-nexusStaging {
-    packageGroup = "io.soffa"
-    stagingProfileId = "c1ae699bac03ae"
-    username = project.findProperty("sonatypeUsername")?.toString()
-    password = project.findProperty("sonatypePassword")?.toString()
-}
-
