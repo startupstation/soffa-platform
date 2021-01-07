@@ -6,23 +6,17 @@ buildscript {
             name = "GitHubPackages"
             setUrl("https://maven.pkg.github.com/startupstation/artifacts")
             credentials {
-                username = "public"
-                password = "c5dcf5af86c496cf11ecc1291c39c8f7619b642e"
+                username = "${GH_MVN_USER}"
+                password = "${GH_MVN_PASSWORD}"
             }
         }
     }
 
     dependencies {
         classpath("io.soffa.gradle:soffa-gradle-plugin:1.1.7")
-        // classpath("de.marcphilipp.gradle:nexus-publish-plugin:0.4.0")
     }
 }
-/*
 
-plugins {
-    id("io.codearte.nexus-staging").version("0.21.2")
-}
-*/
 
 apply(plugin = "idea")
 
@@ -33,7 +27,6 @@ subprojects {
     apply(plugin = "io.soffa.java")
     apply(plugin = "io.soffa.junit5")
     apply(plugin = "maven-publish")
-    //apply(plugin = "de.marcphilipp.nexus-publish")
 
     configure<JavaPluginExtension> {
         withJavadocJar()
@@ -98,19 +91,8 @@ subprojects {
                     }
                 }
             }
-        }
-        /*configure<de.marcphilipp.gradle.nexus.NexusPublishExtension> {
-            clientTimeout.set(java.time.Duration.ofSeconds(90))
-            repositories {
-                sonatype()
-            }
-        }*/
+      
     }
-
-    /*configure<SigningExtension> {
-        val publishing = project.extensions.getByName("publishing") as PublishingExtension
-        sign(publishing.publications["mavenJava"])
-    }*/
 
     repositories {
         // mavenLocal()
@@ -122,15 +104,3 @@ subprojects {
         jcenter()
     }
 }
-/*
-
-nexusStaging {
-    packageGroup = "io.soffa"
-    stagingProfileId = "c1ae699bac03ae"
-    numberOfRetries = 60
-    delayBetweenRetriesInMillis = 5000
-    username = project.findProperty("sonatypeUsername")?.toString()
-    password = project.findProperty("sonatypePassword")?.toString()
-}
-
-*/
